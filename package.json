@@ -7,19 +7,42 @@
 		"vscode": "^1.29.0"
 	},
 	"categories": [
-		"Other"
+		"Programming Languages", "dhall", "lsp"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:dhall"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"languages": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"id": "dhall",
+				"extensions": [".dhall"]
 			}
-		]
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Dhall LSP Configuration",
+			"properties": {
+				"languageServerExample.executable": {
+					"scope": "resource",
+					"type": "string",
+					"default": "",
+					"description": "Path to the dhall-lsp-server executable"
+				},
+				"languageServerExample.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -27,6 +50,10 @@
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"dependencies": {
+		"vscode": "^1.1.25",
+		"vscode-languageclient": "^4.4.0"
 	},
 	"devDependencies": {
 		"typescript": "^3.1.4",
