@@ -1,10 +1,18 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as path from 'path';
+//import * as path from 'path';
 
 import * as vscode from 'vscode';
+import * as child_process from 'child_process';
+import * as os from 'os';
+import * as path from 'path';
+import * as util from 'util';
 
+import {
+	window,
+	workspace
+} from 'vscode';
 import {
 	LanguageClient,
 	LanguageClientOptions,
@@ -16,10 +24,42 @@ let client: LanguageClient;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "vscode-dhall-lsp-server" is now active!');
-	let serverCommand = '/home/vitalii/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse());
+	
+	// ! FIXME: parametrize stack server executable location
+
+	const config = workspace.getConfiguration("vscode-dhall-lsp-server");
+
+	const userDefinedExecutablePath = config.executable;
+
+	let executablePath =  (userDefinedExecutablePath === '') ? 'dhall-lsp-server' : userDefinedExecutablePath; 
+
+	const executableStatus = await obtainExecutableStatus(executablePath);
+
+	if (executableStatus !== 'available') {
+		if (executableStatus === 'timedout') {
+			window.showErrorMessage('The server process has timed out.');
+		} else {
+			if (userDefinedExecutablePath === '') {
+			  window.showErrorMessage('No `dhall-lsp-server` executable is available in the VSCode PATH.\n' +
+								 'You can set an absolute path to the `dhall-lsp-server` executable ' +
+								 'in the plugin settings.');
+			} else {
+				window.showErrorMessage('The server executable path is invalid: [' + executablePath + "]");
+			}
+		}
+		
+		return;
+	}
+
+	
+	
+
+
+
+	// let serverCommand = '/Users/edevi86/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse()); 
 	// let serverCommand = context.asAbsolutePath(path.join('/home/vitalii/.local/bin/dhall-lsp-server'));
 
 	// The debug options for the server
@@ -30,12 +70,12 @@ export function activate(context: vscode.ExtensionContext) {
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
-		run: { command: serverCommand, 
-			   transport: TransportKind.ipc,
+		run: { command: executablePath, 
+			   transport: TransportKind.stdio,
 			   args: runArgs
 			 },
 		debug: {
-			command: serverCommand,
+			command: executablePath,
 			transport: TransportKind.stdio,
 			args: debugArgs
 		}
@@ -73,6 +113,21 @@ export function activate(context: vscode.ExtensionContext) {
 	// });
 
 	// context.subscriptions.push(disposable);
+}
+
+async function obtainExecutableStatus(executableLocation: string) : Promise<string> {
+  const execPromise =  util.promisify(child_process.execFile)
+							 (executableLocation, ['--version'], { timeout: 2000, windowsHide: true })
+							 .then(() => 'available').catch((error) => { 
+								  return 'missing'; 
+								});
+  const timeoutPromise : Promise<string> = new Promise((resolve, reject) => {
+    let timer = setTimeout(() => {
+      clearTimeout(timer);
+      resolve('timedout'); 
+    }, 1000);
+  });
+  return Promise.race([execPromise, timeoutPromise]);
 }
 
 // this method is called when your extension is deactivated

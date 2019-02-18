@@ -1,13 +1,13 @@
 {
 	"name": "vscode-dhall-lsp-server",
-	"displayName": "vscode-dhall-lsp-server",
+	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.29.0"
 	},
 	"categories": [
-		"Programming Languages", "dhall", "lsp"
+		"Programming Languages"
 	],
 	"activationEvents": [
 		"onLanguage:dhall"
@@ -17,20 +17,22 @@
 		"languages": [
 			{
 				"id": "dhall",
-				"extensions": [".dhall"]
+				"extensions": [
+					".dhall"
+				]
 			}
 		],
 		"configuration": {
 			"type": "object",
 			"title": "Dhall LSP Configuration",
 			"properties": {
-				"languageServerExample.executable": {
+				"vscode-dhall-lsp-server.executable": {
 					"scope": "resource",
 					"type": "string",
 					"default": "",
 					"description": "Path to the dhall-lsp-server executable"
 				},
-				"languageServerExample.trace.server": {
+				"vscode-dhall-lsp-server.trace.server": {
 					"scope": "window",
 					"type": "string",
 					"enum": [
@@ -57,7 +59,6 @@
 	},
 	"devDependencies": {
 		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
 		"tslint": "^5.8.0",
 		"@types/node": "^8.10.25",
 		"@types/mocha": "^2.2.42"
