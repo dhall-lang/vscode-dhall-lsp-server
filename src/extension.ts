@@ -5,8 +5,8 @@
 
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
-import * as os from 'os';
-import * as path from 'path';
+// import * as os from 'os';
+// import * as path from 'path';
 import * as util from 'util';
 
 import {
@@ -21,6 +21,9 @@ import {
 } from 'vscode-languageclient';
 
 let client: LanguageClient;
+
+// TODO: check https://github.com/scalameta/metals-vscode/blob/master/src/extension.ts
+const outputChannel = window.createOutputChannel("Dhall LSP");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -88,7 +91,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
-		}
+		},
+		outputChannel: outputChannel
 	};
 
 	// Create the language client and start the client.
@@ -101,6 +105,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
+	outputChannel.appendLine("Dhall server has started.");
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -115,9 +120,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	// context.subscriptions.push(disposable);
 }
 
+// TODO: should also handle case when executable has returned error code on start
 async function obtainExecutableStatus(executableLocation: string) : Promise<string> {
   const execPromise =  util.promisify(child_process.execFile)
-							 (executableLocation, ['--version'], { timeout: 2000, windowsHide: true })
+							 (executableLocation, ['version'], { timeout: 2000, windowsHide: true })
 							 .then(() => 'available').catch((error) => { 
 								  return 'missing'; 
 								});

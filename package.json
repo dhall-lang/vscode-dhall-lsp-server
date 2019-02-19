@@ -3,11 +3,18 @@
 	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
 	"version": "0.0.1",
+	"publisher": "panaeon",
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.29.0"
 	},
 	"categories": [
 		"Programming Languages"
+	],
+	"keywords": [
+		"dhall",
+		"lsp",
+		"language server"
 	],
 	"activationEvents": [
 		"onLanguage:dhall"
