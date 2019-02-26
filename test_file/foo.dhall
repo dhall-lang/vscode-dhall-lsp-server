@@ -44,6 +44,9 @@ let single = ''
                  foo
 
              ''
+
+let generate = //prelude.dhall-lang.org/List/generate
+
 let Person
     : Type
     =   forall (Person : Type)
@@ -62,10 +65,12 @@ let example
         , name =
             "John"
         }
-
+let concat = https://prelude.dhall-lang.org/List/concat
+let foo    = //foo/bar/baz
 let everybody
     : Person → List Text
-    = let concat = http://prelude.dhall-lang.org/List/concat
+    = 
+      
       let zoo    = ./Foo.dhall
       let boo    = ./foo/../bar.dhall
       
