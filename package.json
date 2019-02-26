@@ -35,10 +35,16 @@
 			"title": "Dhall LSP Configuration",
 			"properties": {
 				"vscode-dhall-lsp-server.executable": {
-					"scope": "resource",
+					"scope": "window",
 					"type": "string",
 					"default": "",
 					"description": "Path to the dhall-lsp-server executable"
+				},
+				"vscode-dhall-lsp-server.logFile": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "Extra options to pass to the dhall-lsp-server. Put `[OUTPUT]` to log to the VSCode output."
 				},
 				"vscode-dhall-lsp-server.trace.server": {
 					"scope": "window",
@@ -48,7 +54,7 @@
 						"messages",
 						"verbose"
 					],
-					"default": "verbose",
+					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}

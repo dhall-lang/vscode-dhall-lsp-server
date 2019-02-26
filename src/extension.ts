@@ -57,8 +57,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	
-	
+	// TODO: properly parse extra arguments!!
+	const logFile: string = config.logFile;
+
+	const logFileOpt : string[] = logFile.trim() === '' ? [] : ['--log=' + logFile]; 
 
 
 
@@ -67,8 +69,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-	let runArgs : string[] = [];
-	let debugArgs : string[] = []; 
+	let runArgs : string[] = [...logFileOpt];
+	let debugArgs : string[] = [...logFileOpt]; 
 
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
