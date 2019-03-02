@@ -1,70 +1,55 @@
 # vscode-dhall-lsp-server 
 
-**This project is under construction !!!**
+**This project is in alpha stage !!!**
 
 This is a [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) VSCode pluging for the [Dhall](https://dhall-lang.org) programming language.
 
 
-**This project is under construction !!!**
-
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Compiler diagnostics on file save
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![Screenshot Highlighting](/images/dhall-diagnostics.gif?raw=true)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+[Dhall LSP server](https://github.com/PanAeon/dhall-lsp-server) should be installed.
+
+## Limitations
+This extension has been tested on Linux (NixOS) and macOS (Sierra).
+It might work on Windows but it hasn't been verified.
+
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The following settings are available:
 
-For example:
+* `vscode-dhall-lsp-server.executable`: Absolute path to the dhall-lsp-server executable. If blank the executable is searched on the PATH
+* `vscode-dhall-lsp-server.logFile`: mainly interesting to this extension developers.            Absolute path to the log file location. Put `[OUTPUT]` to log to          the VSCode output.
 
-This extension contributes the following settings:
+* `vscode-dhall-lsp-server.trace.server`: mainly interesting to this extension developers. If set to `verbose` the VSCode will log LSP communication in it's output panel.
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+You'll need to reload the window after you change any of this settings.
 
-## Known Issues
+## Roadmap
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* autoformatting
+* linting
+* caching of imports to improve compilation time
+* goto definition
+* `to-json` and `to-yaml` commands (preview-like)
+* reload extension on settings change
+* definition/documentation on hover
+* file/workspace symbols
+* rename support (?)
+* detailed error messages on request
+* symbol references
+* highlight occurrences
+* multi-workspace support (?)
+* multiple dhall versions (?)
+* snippets
+* code completion
+* function signatures (?)
+* provide import errors source location
+* add timeout to requests (throttling?), cancellation of requests
 
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

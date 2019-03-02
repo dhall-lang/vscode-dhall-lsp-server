@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"preview": true,
 	"engines": {
-		"vscode": "^1.29.0"
+		"vscode": "^1.30.0"
 	},
 	"categories": [
 		"Programming Languages"
@@ -20,6 +20,19 @@
 	"activationEvents": [
 		"onLanguage:dhall"
 	],
+	"icon": "images/dhall-icon.png",
+	"galleryBanner": {
+		"color": "#293845",
+		"theme": "dark"
+	},
+	"homepage": "https://github.com/PanAeon/vscode-dhall-lsp-server",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/PanAeon/vscode-dhall-lsp-server.git"
+	},
+	"bugs": {
+		"url": "https://github.com/PanAeon/vscode-dhall-lsp-server/issues"
+	},
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
@@ -44,7 +57,7 @@
 					"scope": "window",
 					"type": "string",
 					"default": "",
-					"description": "Extra options to pass to the dhall-lsp-server. Put `[OUTPUT]` to log to the VSCode output."
+					"description": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
 				},
 				"vscode-dhall-lsp-server.trace.server": {
 					"scope": "window",

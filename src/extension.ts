@@ -1,8 +1,6 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-//import * as path from 'path';
 
+// The module 'vscode' contains the VS Code extensibility API
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 // import * as os from 'os';
@@ -25,14 +23,11 @@ let client: LanguageClient;
 // TODO: check https://github.com/scalameta/metals-vscode/blob/master/src/extension.ts
 const outputChannel = window.createOutputChannel("Dhall LSP");
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+// * -= The Entry Point =- *
 export async function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "vscode-dhall-lsp-server" is now active!');
+	console.log('..Extension "vscode-dhall-lsp-server" is now active..');
 	
-	// ! FIXME: parametrize stack server executable location
-
 	const config = workspace.getConfiguration("vscode-dhall-lsp-server");
 
 	const userDefinedExecutablePath = config.executable;
@@ -47,7 +42,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		} else {
 			if (userDefinedExecutablePath === '') {
 			  window.showErrorMessage('No `dhall-lsp-server` executable is available in the VSCode PATH.\n' +
-								 'You can set an absolute path to the `dhall-lsp-server` executable ' +
+			                     'You might need to install [Dhall LSP server](https://github.com/PanAeon/dhall-lsp-server).\n' +
+								 'Also you might want to set an absolute path to the `dhall-lsp-server` executable ' +
 								 'in the plugin settings.');
 			} else {
 				window.showErrorMessage('The server executable path is invalid: [' + executablePath + "]");
@@ -57,23 +53,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	// TODO: properly parse extra arguments!!
+	// TODO: properly parse extra arguments!! UNIT TEST !!
 	const logFile: string = config.logFile;
 
 	const logFileOpt : string[] = logFile.trim() === '' ? [] : ['--log=' + logFile]; 
 
 
 
-	// let serverCommand = '/Users/edevi86/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse()); 
+	// let serverCommand = '~/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse()); 
 	// let serverCommand = context.asAbsolutePath(path.join('/home/vitalii/.local/bin/dhall-lsp-server'));
 
-	// The debug options for the server
-	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
 	let runArgs : string[] = [...logFileOpt];
 	let debugArgs : string[] = [...logFileOpt]; 
 
-	// If the extension is launched in debug mode then the debug server options are used
-	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
 		run: { command: executablePath, 
 			   transport: TransportKind.stdio,
@@ -86,9 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
-	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
-		// Register the server for plain text documents
 		documentSelector: [{ scheme: 'file', language: 'dhall' }],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
@@ -97,7 +87,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		outputChannel: outputChannel
 	};
 
-	// Create the language client and start the client.
 	client = new LanguageClient(
 		'vscode-dhall-lsp-server',
 		'VSCode Dhall Language Server',
@@ -105,9 +94,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		clientOptions
 	);
 
-	// Start the client. This will also launch the server
 	client.start();
-	outputChannel.appendLine("Dhall server has started.");
+	outputChannel.appendLine("..Dhall LSP Server has been started..");
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -122,7 +110,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// context.subscriptions.push(disposable);
 }
 
-// TODO: should also handle case when executable has returned error code on start
+// TODO: should also handle case when executable has returned error code on startup
 async function obtainExecutableStatus(executableLocation: string) : Promise<string> {
   const execPromise =  util.promisify(child_process.execFile)
 							 (executableLocation, ['version'], { timeout: 2000, windowsHide: true })
@@ -138,7 +126,6 @@ async function obtainExecutableStatus(executableLocation: string) : Promise<stri
   return Promise.race([execPromise, timeoutPromise]);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {
 	if (!client) {
 		return undefined;

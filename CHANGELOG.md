@@ -3,5 +3,5 @@ All notable changes to the "vscode-dhall-lsp-server" extension will be documente
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
-- Initial release
+## [0.0.1]
+- Alpha release. Only basic diagnostics on save is working.
