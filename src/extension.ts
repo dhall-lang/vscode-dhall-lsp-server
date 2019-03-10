@@ -96,6 +96,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	client.start();
 	outputChannel.appendLine("..Dhall LSP Server has been started..");
+
+	activatePreview(context.subscriptions);
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -131,4 +133,47 @@ export function deactivate() {
 		return undefined;
 	}
 	return client.stop();
+}
+
+async function activatePreview(subscriptions: any) {
+	const myScheme = 'dhall-json';
+	const myProvider = new class implements vscode.TextDocumentContentProvider {
+
+		// emitter and its event
+		onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
+		onDidChange = this.onDidChangeEmitter.event;
+
+		provideTextDocumentContent(uri: vscode.Uri): string {
+			// simply invoke cowsay, use uri-path as text
+			return '{"stub": "' + uri.path + '"}';
+		}
+	};
+
+	subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider));
+
+	// register a command that opens a cowsay-document
+	subscriptions.push(vscode.commands.registerCommand('dhall.json.preview', async () => {
+		//let what = await vscode.window.showInputBox({ placeHolder: 'cowsay...' });
+		// if (what) {
+			let uri = vscode.Uri.parse('dhall-json:' + 'foo.json'); // strip name dhall
+			let doc = await vscode.workspace.openTextDocument(uri); // calls back into the provider
+			await vscode.window.showTextDocument(doc, { preview: false });
+		// }
+	}));
+
+	// register a command that updates the current cowsay
+	// subscriptions.push(vscode.commands.registerCommand('cowsay.backwards', async () => {
+	// 	if (!vscode.window.activeTextEditor) {
+	// 		return; // no editor
+	// 	}
+	// 	let { document } = vscode.window.activeTextEditor;
+	// 	if (document.uri.scheme !== myScheme) {
+	// 		return; // not my scheme
+	// 	}
+	// 	// get path-components, reverse it, and create a new uri
+	// 	let say = document.uri.path;
+	// 	let newSay = say.split('').reverse().join('');
+	// 	let newUri = document.uri.with({ path: newSay });
+	// 	await vscode.window.showTextDocument(newUri, { preview: false });
+	// }));
 }

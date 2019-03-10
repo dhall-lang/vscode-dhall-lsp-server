@@ -18,7 +18,8 @@
 		"language server"
 	],
 	"activationEvents": [
-		"onLanguage:dhall"
+		"onLanguage:dhall",
+		"onCommand:dhall.json.preview"
 	],
 	"icon": "images/dhall-icon.png",
 	"galleryBanner": {
@@ -35,6 +36,21 @@
 	},
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"command": "dhall.json.preview",
+				"title": "dhall-to-json preview",
+				"category": "dhall"
+			}
+		],
+		"menus": {
+		"commandPalette": [
+			{
+				"command": "dhall.json.preview",
+				"when": "editorLangId == dhall",
+				"group": "navigation"
+			}
+		]},
 		"languages": [
 			{
 				"id": "dhall",
