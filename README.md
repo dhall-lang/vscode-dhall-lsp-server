@@ -1,19 +1,18 @@
 # vscode-dhall-lsp-server 
 
-**This project is in alpha stage !!!**
-
 This is a [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) VSCode pluging for the [Dhall](https://dhall-lang.org) programming language.
 
 
 ## Features
 
 * Compiler diagnostics on file save
+* Autoformatting
 
 ![Screenshot Highlighting](/images/dhall-diagnostics.gif?raw=true)
 
 ## Requirements
 
-[Dhall LSP server](https://github.com/PanAeon/dhall-lsp-server) should be installed.
+Dhall LSP server from the [Dhall Haskell](https://github.com/dhall-lang/dhall-haskell) repo should be installed.
 
 ## Limitations
 This extension has been tested on Linux (NixOS) and macOS (Sierra).
@@ -33,7 +32,6 @@ You'll need to reload the window after you change any of this settings.
 
 ## Roadmap
 
-* autoformatting
 * linting
 * caching of imports to improve compilation time
 * goto definition
