@@ -135,19 +135,58 @@ export function deactivate() {
 	return client.stop();
 }
 
+const myProvider = new class implements vscode.TextDocumentContentProvider {
+
+	// emitter and its event
+	onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
+	onDidChange = this.onDidChangeEmitter.event;
+
+	
+
+	async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
+		const dhallToJsonPath = "/home/vitalii/.local/bin/dhall-to-json";
+
+		console.log(">>>foo<<<");
+
+		const sourceURI = uri.with({ scheme: 'file',
+	                                 path: uri.path.replace(/\.json$/gi, "") });
+
+		return await vscode.workspace.openTextDocument(sourceURI).then((document) => {
+			let text = document.getText();
+
+			let child = child_process.execFile(dhallToJsonPath, ["--explain", "--pretty"], { 
+							 timeout: 5000, 
+							 windowsHide: true,
+						});
+			child.stdin.write(text);
+			child.stdin.end();
+
+			let buffer = "";
+
+			child.stdout.on('data', (data) => {
+				buffer += data;
+			  });
+			child.stderr.on('data', (data) => {
+				buffer += data; // FIXME: supper sloppppy
+			});
+
+			return new Promise((resolve, reject) => {
+				child.on('exit', function (code, signal) {
+					console.log('child process exited with ' +
+								`code ${code} and signal ${signal}`);
+					resolve(buffer);
+				  });
+			});
+		
+		});
+		
+	}
+};
+// TODO: side by side
 async function activatePreview(subscriptions: any) {
 	const myScheme = 'dhall-json';
-	const myProvider = new class implements vscode.TextDocumentContentProvider {
-
-		// emitter and its event
-		onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-		onDidChange = this.onDidChangeEmitter.event;
-
-		provideTextDocumentContent(uri: vscode.Uri): string {
-			// simply invoke cowsay, use uri-path as text
-			return '{"stub": "' + uri.path + '"}';
-		}
-	};
+	
+	
 
 	subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider));
 
@@ -155,9 +194,34 @@ async function activatePreview(subscriptions: any) {
 	subscriptions.push(vscode.commands.registerCommand('dhall.json.preview', async () => {
 		//let what = await vscode.window.showInputBox({ placeHolder: 'cowsay...' });
 		// if (what) {
-			let uri = vscode.Uri.parse('dhall-json:' + 'foo.json'); // strip name dhall
-			let doc = await vscode.workspace.openTextDocument(uri); // calls back into the provider
-			await vscode.window.showTextDocument(doc, { preview: false });
+			var sourceURI: vscode.Uri;
+
+	if (vscode.window.activeTextEditor) {
+		// TODO: check this is dhall file?
+		sourceURI = vscode.window.activeTextEditor.document.uri;
+    } else {
+		return;
+	}
+
+			let uri = sourceURI.with({ scheme: 'dhall-json',
+									   path: sourceURI.path + ".json" // FIXME: sloppy
+									 });
+			// let uri = vscode.Uri.parse('dhall-json:' + sourceURI.path); // 
+			// FIXME: normal refresh
+			myProvider.onDidChangeEmitter.fire(uri);
+
+			let doc = await vscode.workspace.openTextDocument(uri); // FIxME: strip name dhall
+
+			
+			
+
+			const resourceColumn = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
+			const sideBySide = true;
+			await vscode.window.showTextDocument(doc, { 
+				preview: true,
+				viewColumn: sideBySide ? resourceColumn + 1 : resourceColumn,
+				preserveFocus: true
+			}); // FIXME: on the side!
 		// }
 	}));
 
