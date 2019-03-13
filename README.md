@@ -6,6 +6,7 @@ This is a [Language Server Protocol](https://microsoft.github.io/language-server
 ## Features
 
 * Compiler diagnostics on file save
+* Autoformatting
 
 ![Screenshot Diagnostics](/images/dhall-diagnostics.gif?raw=true)
 
@@ -15,7 +16,7 @@ This is a [Language Server Protocol](https://microsoft.github.io/language-server
 
 ## Requirements
 
-[Dhall LSP server](https://github.com/PanAeon/dhall-lsp-server) should be installed.
+Dhall LSP server from the [Dhall Haskell](https://github.com/dhall-lang/dhall-haskell) repo should be installed.
 
 ## Limitations
 This extension has been tested on Linux (NixOS) and macOS (Sierra).
