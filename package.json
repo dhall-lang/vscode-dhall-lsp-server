@@ -41,16 +41,47 @@
 				"command": "dhall.json.preview",
 				"title": "dhall-to-json preview",
 				"category": "dhall"
+			},
+			{
+				"command": "dhall.text.preview",
+				"title": "dhall-to-text preview",
+				"category": "dhall"
+			},
+			{
+				"command": "dhall.bash.preview",
+				"title": "dhall-to-bash preview",
+				"category": "dhall"
+			},
+			{
+				"command": "dhall.yaml.preview",
+				"title": "dhall-to-yaml preview",
+				"category": "dhall"
 			}
 		],
 		"menus": {
-		"commandPalette": [
-			{
-				"command": "dhall.json.preview",
-				"when": "editorLangId == dhall",
-				"group": "navigation"
-			}
-		]},
+			"commandPalette": [
+				{
+					"command": "dhall.json.preview",
+					"when": "editorLangId == dhall",
+					"group": "navigation"
+				},
+				{
+					"command": "dhall.text.preview",
+					"when": "editorLangId == dhall",
+					"group": "navigation"
+				},
+				{
+					"command": "dhall.bash.preview",
+					"when": "editorLangId == dhall",
+					"group": "navigation"
+				},
+				{
+					"command": "dhall.yaml.preview",
+					"when": "editorLangId == dhall",
+					"group": "navigation"
+				}
+			]
+		},
 		"languages": [
 			{
 				"id": "dhall",
@@ -61,19 +92,19 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "Dhall LSP Configuration",
+			"title": "Dhall LSP",
 			"properties": {
 				"vscode-dhall-lsp-server.executable": {
 					"scope": "window",
 					"type": "string",
 					"default": "",
-					"description": "Path to the dhall-lsp-server executable"
+					"markdownDescription": "Path to the `dhall-lsp-server` executable"
 				},
 				"vscode-dhall-lsp-server.logFile": {
 					"scope": "window",
 					"type": "string",
 					"default": "",
-					"description": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
+					"markdownDescription": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
 				},
 				"vscode-dhall-lsp-server.trace.server": {
 					"scope": "window",
@@ -85,6 +116,60 @@
 					],
 					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
+				},
+				"vscode-dhall-lsp-server.preview.openOnTheSide": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "If true splits the window and puts previews on the right"
+				},
+				"vscode-dhall-lsp-server.preview.dhallToJson.executable": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the `dhall-to-json` executable"
+				},
+				"vscode-dhall-lsp-server.preview.dhallToJson.extraArguments": {
+					"scope": "window",
+					"type": "string",
+					"default": "--pretty --explain",
+					"description": "Extra arguments to be passed."
+				},
+				"vscode-dhall-lsp-server.preview.dhallToText.executable": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the `dhall-to-text` executable"
+				},
+				"vscode-dhall-lsp-server.preview.dhallToText.extraArguments": {
+					"scope": "window",
+					"type": "string",
+					"default": "--explain",
+					"description": "Extra arguments to be passed."
+				},
+				"vscode-dhall-lsp-server.preview.dhallToBash.executable": {
+					"scope": "window",
+					"type": "string",
+					"default": "--explain",
+					"markdownDescription": "Path to the `dhall-to-bash` executable"
+				},
+				"vscode-dhall-lsp-server.preview.dhallToBash.extraArguments": {
+					"scope": "window",
+					"type": "string",
+					"default": "--explain",
+					"description": "Extra arguments to be passed."
+				},
+				"vscode-dhall-lsp-server.preview.dhallToYaml.executable": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the `dhall-to-yaml` executable"
+				},
+				"vscode-dhall-lsp-server.preview.dhallToYaml.extraArguments": {
+					"scope": "window",
+					"type": "string",
+					"default": "--explain",
+					"description": "Extra arguments to be passed."
 				}
 			}
 		}
@@ -97,6 +182,7 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"dependencies": {
+		"shell-quote": "~1.6.1",
 		"vscode-languageclient": "~5.1.1"
 	},
 	"devDependencies": {
@@ -104,6 +190,7 @@
 		"typescript": "^3.1.4",
 		"tslint": "^5.8.0",
 		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
+		"@types/mocha": "^2.2.42",
+		"@types/shell-quote": "~1.6.1"
 	}
 }

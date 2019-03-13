@@ -6,6 +6,7 @@ import * as child_process from 'child_process';
 // import * as os from 'os';
 // import * as path from 'path';
 import * as util from 'util';
+import * as preview from './preview';
 
 import {
 	window,
@@ -97,7 +98,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	client.start();
 	outputChannel.appendLine("..Dhall LSP Server has been started..");
 
-	activatePreview(context.subscriptions);
+	preview.activatePreview('dhall-json', context.subscriptions);
+	preview.activatePreview('dhall-text', context.subscriptions);
+	preview.activatePreview('dhall-bash', context.subscriptions);
+	preview.activatePreview('dhall-yaml', context.subscriptions);
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -111,6 +116,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// context.subscriptions.push(disposable);
 }
+
+// TODO: maybe use promisify-child-process ??
 
 // TODO: should also handle case when executable has returned error code on startup
 async function obtainExecutableStatus(executableLocation: string) : Promise<string> {
@@ -128,6 +135,7 @@ async function obtainExecutableStatus(executableLocation: string) : Promise<stri
   return Promise.race([execPromise, timeoutPromise]);
 }
 
+
 export function deactivate() {
 	if (!client) {
 		return undefined;
@@ -135,109 +143,3 @@ export function deactivate() {
 	return client.stop();
 }
 
-const myProvider = new class implements vscode.TextDocumentContentProvider {
-
-	// emitter and its event
-	onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-	onDidChange = this.onDidChangeEmitter.event;
-
-	
-
-	async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
-		const dhallToJsonPath = "/home/vitalii/.local/bin/dhall-to-json";
-
-		console.log(">>>foo<<<");
-
-		const sourceURI = uri.with({ scheme: 'file',
-	                                 path: uri.path.replace(/\.json$/gi, "") });
-
-		return await vscode.workspace.openTextDocument(sourceURI).then((document) => {
-			let text = document.getText();
-
-			let child = child_process.execFile(dhallToJsonPath, ["--explain", "--pretty"], { 
-							 timeout: 5000, 
-							 windowsHide: true,
-						});
-			child.stdin.write(text);
-			child.stdin.end();
-
-			let buffer = "";
-
-			child.stdout.on('data', (data) => {
-				buffer += data;
-			  });
-			child.stderr.on('data', (data) => {
-				buffer += data; // FIXME: supper sloppppy
-			});
-
-			return new Promise((resolve, reject) => {
-				child.on('exit', function (code, signal) {
-					console.log('child process exited with ' +
-								`code ${code} and signal ${signal}`);
-					resolve(buffer);
-				  });
-			});
-		
-		});
-		
-	}
-};
-// TODO: side by side
-async function activatePreview(subscriptions: any) {
-	const myScheme = 'dhall-json';
-	
-	
-
-	subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider));
-
-	// register a command that opens a cowsay-document
-	subscriptions.push(vscode.commands.registerCommand('dhall.json.preview', async () => {
-		//let what = await vscode.window.showInputBox({ placeHolder: 'cowsay...' });
-		// if (what) {
-			var sourceURI: vscode.Uri;
-
-	if (vscode.window.activeTextEditor) {
-		// TODO: check this is dhall file?
-		sourceURI = vscode.window.activeTextEditor.document.uri;
-    } else {
-		return;
-	}
-
-			let uri = sourceURI.with({ scheme: 'dhall-json',
-									   path: sourceURI.path + ".json" // FIXME: sloppy
-									 });
-			// let uri = vscode.Uri.parse('dhall-json:' + sourceURI.path); // 
-			// FIXME: normal refresh
-			myProvider.onDidChangeEmitter.fire(uri);
-
-			let doc = await vscode.workspace.openTextDocument(uri); // FIxME: strip name dhall
-
-			
-			
-
-			const resourceColumn = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
-			const sideBySide = true;
-			await vscode.window.showTextDocument(doc, { 
-				preview: true,
-				viewColumn: sideBySide ? resourceColumn + 1 : resourceColumn,
-				preserveFocus: true
-			}); // FIXME: on the side!
-		// }
-	}));
-
-	// register a command that updates the current cowsay
-	// subscriptions.push(vscode.commands.registerCommand('cowsay.backwards', async () => {
-	// 	if (!vscode.window.activeTextEditor) {
-	// 		return; // no editor
-	// 	}
-	// 	let { document } = vscode.window.activeTextEditor;
-	// 	if (document.uri.scheme !== myScheme) {
-	// 		return; // not my scheme
-	// 	}
-	// 	// get path-components, reverse it, and create a new uri
-	// 	let say = document.uri.path;
-	// 	let newSay = say.split('').reverse().join('');
-	// 	let newUri = document.uri.with({ path: newSay });
-	// 	await vscode.window.showTextDocument(newUri, { preview: false });
-	// }));
-}
