@@ -1,7 +1,5 @@
 # vscode-dhall-lsp-server 
 
-**This project is in alpha stage !!!**
-
 This is a [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) VSCode pluging for the [Dhall](https://dhall-lang.org) programming language.
 
 
@@ -9,7 +7,11 @@ This is a [Language Server Protocol](https://microsoft.github.io/language-server
 
 * Compiler diagnostics on file save
 
-![Screenshot Highlighting](/images/dhall-diagnostics.gif?raw=true)
+![Screenshot Diagnostics](/images/dhall-diagnostics.gif?raw=true)
+
+* Preview for `dhall-to-json`, `dhall-to-yaml`, `dhall-to-text` and `dhall-to-bash` commands.
+
+![Screenshot dhall-to-json](/images/dhall-to-json.png)
 
 ## Requirements
 
@@ -33,23 +35,22 @@ You'll need to reload the window after you change any of this settings.
 
 ## Roadmap
 
-* autoformatting
+* ~~autoformatting~~ (done via lsp server)
+* ~~`to-json` and `to-yaml` commands (preview-like)~~
 * linting
-* caching of imports to improve compilation time
-* goto definition
-* `to-json` and `to-yaml` commands (preview-like)
-* reload extension on settings change
-* definition/documentation on hover
 * file/workspace symbols
-* rename support (?)
-* detailed error messages on request
+* rename support (?) workspace wise (?)
+* goto definition
+* definition/documentation on hover
 * symbol references
 * highlight occurrences
 * multi-workspace support (?)
-* multiple dhall versions (?)
+* code completion (?)
 * snippets
-* code completion
-* function signatures (?)
 * provide import errors source location
+* detailed error messages on request
+* reload dhall-lsp-server on settings change
+* caching of imports to improve compilation time
+* function signatures (?)
 * add timeout to requests (throttling?), cancellation of requests
 

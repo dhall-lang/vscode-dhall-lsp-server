@@ -2,7 +2,7 @@
 	"name": "vscode-dhall-lsp-server",
 	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "panaeon",
 	"license": "MIT",
 	"preview": true,
