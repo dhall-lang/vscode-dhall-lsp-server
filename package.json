@@ -186,12 +186,12 @@
 		"vscode-languageclient": "~5.1.1"
 	},
 	"devDependencies": {
-		"vscode": "^1.1.25",
-		"typescript": "^3.1.4",
-		"tslint": "^5.8.0",
-                "tar": ">=4.4.2",
-		"@types/node": "^8.10.25",
 		"@types/mocha": "^2.2.42",
-		"@types/shell-quote": "~1.6.1"
+		"@types/node": "^8.10.25",
+		"@types/shell-quote": "~1.6.1",
+		"tar": ">=4.4.2",
+		"tslint": "^5.8.0",
+		"typescript": "^3.1.4",
+		"vscode": "^1.1.34"
 	}
 }
