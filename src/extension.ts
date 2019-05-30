@@ -2,6 +2,7 @@
 
 // The module 'vscode' contains the VS Code extensibility API
 import * as vscode from 'vscode';
+import { ProvideHoverSignature } from 'vscode-languageclient';
 import * as child_process from 'child_process';
 // import * as os from 'os';
 // import * as path from 'path';
@@ -23,6 +24,35 @@ let client: LanguageClient;
 
 // TODO: check https://github.com/scalameta/metals-vscode/blob/master/src/extension.ts
 const outputChannel = window.createOutputChannel("Dhall LSP");
+
+// copied and adapted from vscode-hie-server!
+function trustedHoverHack(
+	document: vscode.TextDocument,
+	position: vscode.Position,
+	token: vscode.CancellationToken,
+	next: ProvideHoverSignature
+): vscode.ProviderResult<vscode.Hover> {
+	const res = next(document, position, token);
+	return Promise.resolve(res).then(r => {
+		if (r !== null && r !== undefined) {
+			r.contents = r.contents.map(trust);
+		}
+		return r;
+	});
+}
+
+function trust(ms : vscode.MarkedString) : vscode.MarkedString {
+	let s : string = "";
+	if (typeof ms === 'string') {
+		s = ms; 
+	} else if (typeof ms === 'object') {
+		s = ms.value;
+	}
+
+	const md = new vscode.MarkdownString(s);
+	md.isTrusted = true;
+	return md;
+}
 
 // * -= The Entry Point =- *
 export async function activate(context: vscode.ExtensionContext) {
@@ -85,6 +115,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
 		},
+		middleware: {
+			provideHover: trustedHoverHack
+    	},
 		outputChannel: outputChannel
 	};
 
