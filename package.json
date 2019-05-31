@@ -56,6 +56,11 @@
 				"command": "dhall.yaml.preview",
 				"title": "dhall-to-yaml preview",
 				"category": "dhall"
+			},
+			{
+				"command": "dhall.lint",
+				"title": "Lint Dhall file",
+				"category": "dhall"
 			}
 		],
 		"menus": {
@@ -77,6 +82,11 @@
 				},
 				{
 					"command": "dhall.yaml.preview",
+					"when": "editorLangId == dhall",
+					"group": "navigation"
+				},
+				{
+					"command": "dhall.lint",
 					"when": "editorLangId == dhall",
 					"group": "navigation"
 				}

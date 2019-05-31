@@ -103,6 +103,13 @@ export async function activate(context: vscode.ExtensionContext) {
 	preview.activatePreview('dhall-bash', context.subscriptions);
 	preview.activatePreview('dhall-yaml', context.subscriptions);
 
+	// activate linting command
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {
+		const cmd = {
+      		command : "dhall.lint",
+      		arguments: [ editor.document.uri.toString() ] };
+		client.sendRequest('workspace/executeCommand', cmd);
+	}));
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
