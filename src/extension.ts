@@ -7,6 +7,7 @@ import * as child_process from 'child_process';
 // import * as path from 'path';
 import * as util from 'util';
 import * as preview from './preview';
+import * as explain from './explain';
 
 import {
 	window,
@@ -102,6 +103,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	preview.activatePreview('dhall-text', context.subscriptions);
 	preview.activatePreview('dhall-bash', context.subscriptions);
 	preview.activatePreview('dhall-yaml', context.subscriptions);
+
+	// enable "dhall-explain" URIs
+	context.subscriptions.push(
+		vscode.workspace.registerTextDocumentContentProvider(
+			"dhall-explain", new explain.ExplainProvider()));
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
