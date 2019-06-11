@@ -59,7 +59,7 @@
 			},
 			{
 				"command": "dhall.lint",
-				"title": "Lint Dhall file",
+				"title": "Lint and format Dhall file",
 				"category": "dhall"
 			}
 		],
