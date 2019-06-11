@@ -7,6 +7,7 @@ import * as child_process from 'child_process';
 // import * as path from 'path';
 import * as util from 'util';
 import * as preview from './preview';
+import * as explain from './explain';
 
 import {
 	window,
@@ -110,6 +111,12 @@ export async function activate(context: vscode.ExtensionContext) {
       		arguments: [ editor.document.uri.toString() ] };
 		client.sendRequest('workspace/executeCommand', cmd);
 	}));
+
+	// enable "dhall-explain" URIs
+	context.subscriptions.push(
+		vscode.workspace.registerTextDocumentContentProvider(
+			"dhall-explain", new explain.ExplainProvider()));
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
