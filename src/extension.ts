@@ -29,12 +29,12 @@ const outputChannel = window.createOutputChannel("Dhall LSP");
 export async function activate(context: vscode.ExtensionContext) {
 
 	console.log('..Extension "vscode-dhall-lsp-server" is now active..');
-	
+
 	const config = workspace.getConfiguration("vscode-dhall-lsp-server");
 
 	const userDefinedExecutablePath = config.executable;
 
-	let executablePath =  (userDefinedExecutablePath === '') ? 'dhall-lsp-server' : userDefinedExecutablePath; 
+	let executablePath =  (userDefinedExecutablePath === '') ? 'dhall-lsp-server' : userDefinedExecutablePath;
 
 	const executableStatus = await obtainExecutableStatus(executablePath);
 
@@ -51,25 +51,25 @@ export async function activate(context: vscode.ExtensionContext) {
 				window.showErrorMessage('The server executable path is invalid: [' + executablePath + "]");
 			}
 		}
-		
+
 		return;
 	}
 
 	// TODO: properly parse extra arguments!! UNIT TEST !!
 	const logFile: string = config.logFile;
 
-	const logFileOpt : string[] = logFile.trim() === '' ? [] : ['--log=' + logFile]; 
+	const logFileOpt : string[] = logFile.trim() === '' ? [] : ['--log=' + logFile];
 
 
 
-	// let serverCommand = '~/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse()); 
+	// let serverCommand = '~/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse());
 	// let serverCommand = context.asAbsolutePath(path.join('/home/vitalii/.local/bin/dhall-lsp-server'));
 
 	let runArgs : string[] = [...logFileOpt];
-	let debugArgs : string[] = [...logFileOpt]; 
+	let debugArgs : string[] = [...logFileOpt];
 
 	let serverOptions: ServerOptions = {
-		run: { command: executablePath, 
+		run: { command: executablePath,
 			   transport: TransportKind.stdio,
 			   args: runArgs
 			 },
@@ -104,6 +104,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	preview.activatePreview('dhall-bash', context.subscriptions);
 	preview.activatePreview('dhall-yaml', context.subscriptions);
 
+	// activate linting command
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {
+		const cmd = {
+      		command : "dhall.server.lint",
+      		arguments: [ editor.document.uri.toString() ] };
+		client.sendRequest('workspace/executeCommand', cmd);
+	}));
+
 	// enable "dhall-explain" URIs
 	context.subscriptions.push(
 		vscode.workspace.registerTextDocumentContentProvider(
@@ -129,13 +137,13 @@ export async function activate(context: vscode.ExtensionContext) {
 async function obtainExecutableStatus(executableLocation: string) : Promise<string> {
   const execPromise =  util.promisify(child_process.execFile)
 							 (executableLocation, ['version'], { timeout: 2000, windowsHide: true })
-							 .then(() => 'available').catch((error) => { 
-								  return 'missing'; 
+							 .then(() => 'available').catch((error) => {
+								  return 'missing';
 								});
   const timeoutPromise : Promise<string> = new Promise((resolve, reject) => {
     let timer = setTimeout(() => {
       clearTimeout(timer);
-      resolve('timedout'); 
+      resolve('timedout');
     }, 1000);
   });
   return Promise.race([execPromise, timeoutPromise]);
