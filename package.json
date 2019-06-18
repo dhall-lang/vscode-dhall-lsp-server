@@ -61,6 +61,11 @@
 				"command": "dhall.lint",
 				"title": "Lint and format Dhall file",
 				"category": "dhall"
+			},
+			{
+				"command": "dhall.annotateLet",
+				"title": "Annotate Let binding with its type",
+				"category": "dhall"
 			}
 		],
 		"menus": {
@@ -90,7 +95,13 @@
 					"when": "editorLangId == dhall",
 					"group": "navigation"
 				}
-			]
+			],
+      "editor/context": [
+        {
+          "command" : "dhall.annotateLet",
+          "when": "editorLangId == dhall"
+        }
+      ]
 		},
 		"languages": [
 			{
