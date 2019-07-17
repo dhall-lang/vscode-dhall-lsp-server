@@ -126,6 +126,28 @@ export async function activate(context: vscode.ExtensionContext) {
 		client.sendRequest('workspace/executeCommand', cmd);
 	}));
 
+  // activate freezeImport command
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.freezeImport", (editor, edit) => {
+		const cmd = {
+      		command : "dhall.server.freezeImport",
+      		arguments: [
+            {
+              position: editor.selection.active,
+              textDocument: {uri: editor.document.uri.toString()}
+            }
+          ]
+      }; // editor.document.uri.toString()
+		client.sendRequest('workspace/executeCommand', cmd);
+	}));
+
+  // activate freezeAllImports command
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.freezeAllImports", (editor, edit) => {
+		const cmd = {
+      		command : "dhall.server.freezeAllImports",
+      		arguments: [ editor.document.uri.toString() ] };
+		client.sendRequest('workspace/executeCommand', cmd);
+	}));
+
 	// enable "dhall-explain" URIs
 	context.subscriptions.push(
 		vscode.workspace.registerTextDocumentContentProvider(
