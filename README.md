@@ -53,6 +53,15 @@ The following settings are available:
 
 You'll need to reload the window after you change any of this settings.
 
+# Developer instructions
+
+- Check out a copy of the git repository
+- Run `npm install` inside the checked-out directory
+- Open the directory in VSCode
+- In the debug tab press the green 'play' button. Alternatively press F5.
+  This opens a new VSCode window with the extension loaded.
+
+
 ## Roadmap
 
 * file/workspace symbols
