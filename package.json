@@ -66,6 +66,16 @@
 				"command": "dhall.annotateLet",
 				"title": "Annotate Let binding with its type",
 				"category": "dhall"
+			},
+      {
+				"command": "dhall.freezeImport",
+				"title": "Freeze (refreeze) import",
+				"category": "dhall"
+			},
+      {
+				"command": "dhall.freezeAllImports",
+				"title": "Freeze (refreeze) all imports",
+				"category": "dhall"
 			}
 		],
 		"menus": {
@@ -99,6 +109,10 @@
       "editor/context": [
         {
           "command" : "dhall.annotateLet",
+          "when": "editorLangId == dhall"
+        },
+        {
+          "command" : "dhall.freezeImport",
           "when": "editorLangId == dhall"
         }
       ]
