@@ -38,26 +38,6 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "dhall.json.preview",
-				"title": "dhall-to-json preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.text.preview",
-				"title": "dhall-to-text preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.bash.preview",
-				"title": "dhall-to-bash preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.yaml.preview",
-				"title": "dhall-to-yaml preview",
-				"category": "dhall"
-			},
-			{
 				"command": "dhall.lint",
 				"title": "Lint and format Dhall file",
 				"category": "dhall"
@@ -80,26 +60,6 @@
 		],
 		"menus": {
 			"commandPalette": [
-				{
-					"command": "dhall.json.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.text.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.bash.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.yaml.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
 				{
 					"command": "dhall.lint",
 					"when": "editorLangId == dhall",

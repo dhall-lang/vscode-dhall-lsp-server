@@ -30,10 +30,6 @@ This is a [Language Server Protocol](https://microsoft.github.io/language-server
 
 ![Type hover](/images/type-hover.png)
 
-* Preview for `dhall-to-json`, `dhall-to-yaml`, `dhall-to-text` and `dhall-to-bash` commands.
-
-![Screenshot dhall-to-json](/images/dhall-to-json.png)
-
 ## Requirements
 
 `dhall-lsp-server` from the [Dhall Haskell](https://github.com/dhall-lang/dhall-haskell) repo should be installed. We also suggest you install the [Dhall Language Support](https://marketplace.visualstudio.com/items?itemName=panaeon.dhall-lang) to enable syntax highlighting for dhall files.
