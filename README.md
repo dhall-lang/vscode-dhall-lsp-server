@@ -1,7 +1,6 @@
 ## vscode-dhall-lsp-server
 This is a [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) VSCode plugin for the [Dhall](https://dhall-lang.org) programming language.
 
-
 ![](./images/screencap.png)
 
 # Dhall language support in VSCode/ium
