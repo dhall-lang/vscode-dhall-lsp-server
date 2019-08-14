@@ -2,7 +2,7 @@
 	"name": "vscode-dhall-lsp-server",
 	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "panaeon",
 	"license": "MIT",
 	"preview": true,
@@ -46,12 +46,12 @@
 				"title": "Annotate Let binding with its type",
 				"category": "dhall"
 			},
-      {
+			{
 				"command": "dhall.freezeImport",
 				"title": "Freeze (refreeze) import",
 				"category": "dhall"
 			},
-      {
+			{
 				"command": "dhall.freezeAllImports",
 				"title": "Freeze (refreeze) all imports",
 				"category": "dhall"
@@ -65,16 +65,16 @@
 					"group": "navigation"
 				}
 			],
-      "editor/context": [
-        {
-          "command" : "dhall.annotateLet",
-          "when": "editorLangId == dhall"
-        },
-        {
-          "command" : "dhall.freezeImport",
-          "when": "editorLangId == dhall"
-        }
-      ]
+			"editor/context": [
+				{
+					"command": "dhall.annotateLet",
+					"when": "editorLangId == dhall"
+				},
+				{
+					"command": "dhall.freezeImport",
+					"when": "editorLangId == dhall"
+				}
+			]
 		},
 		"languages": [
 			{
