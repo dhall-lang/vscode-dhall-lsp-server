@@ -2,7 +2,7 @@
 	"name": "vscode-dhall-lsp-server",
 	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"publisher": "panaeon",
 	"license": "MIT",
 	"preview": true,
@@ -18,8 +18,7 @@
 		"language server"
 	],
 	"activationEvents": [
-		"onLanguage:dhall",
-		"onCommand:dhall.json.preview"
+		"onLanguage:dhall"
 	],
 	"icon": "images/dhall-icon.png",
 	"galleryBanner": {
@@ -38,26 +37,6 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "dhall.json.preview",
-				"title": "dhall-to-json preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.text.preview",
-				"title": "dhall-to-text preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.bash.preview",
-				"title": "dhall-to-bash preview",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.yaml.preview",
-				"title": "dhall-to-yaml preview",
-				"category": "dhall"
-			},
-			{
 				"command": "dhall.lint",
 				"title": "Lint and format Dhall file",
 				"category": "dhall"
@@ -67,12 +46,12 @@
 				"title": "Annotate Let binding with its type",
 				"category": "dhall"
 			},
-      {
+			{
 				"command": "dhall.freezeImport",
 				"title": "Freeze (refreeze) import",
 				"category": "dhall"
 			},
-      {
+			{
 				"command": "dhall.freezeAllImports",
 				"title": "Freeze (refreeze) all imports",
 				"category": "dhall"
@@ -81,41 +60,21 @@
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "dhall.json.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.text.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.bash.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
-					"command": "dhall.yaml.preview",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				},
-				{
 					"command": "dhall.lint",
 					"when": "editorLangId == dhall",
 					"group": "navigation"
 				}
 			],
-      "editor/context": [
-        {
-          "command" : "dhall.annotateLet",
-          "when": "editorLangId == dhall"
-        },
-        {
-          "command" : "dhall.freezeImport",
-          "when": "editorLangId == dhall"
-        }
-      ]
+			"editor/context": [
+				{
+					"command": "dhall.annotateLet",
+					"when": "editorLangId == dhall"
+				},
+				{
+					"command": "dhall.freezeImport",
+					"when": "editorLangId == dhall"
+				}
+			]
 		},
 		"languages": [
 			{
@@ -151,60 +110,6 @@
 					],
 					"default": "off",
 					"description": "Traces the communication between VS Code and the language server."
-				},
-				"vscode-dhall-lsp-server.preview.openOnTheSide": {
-					"scope": "window",
-					"type": "boolean",
-					"default": true,
-					"description": "If true splits the window and puts previews on the right"
-				},
-				"vscode-dhall-lsp-server.preview.dhallToJson.executable": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the `dhall-to-json` executable"
-				},
-				"vscode-dhall-lsp-server.preview.dhallToJson.extraArguments": {
-					"scope": "window",
-					"type": "string",
-					"default": "--pretty --explain",
-					"description": "Extra arguments to be passed."
-				},
-				"vscode-dhall-lsp-server.preview.dhallToText.executable": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the `dhall-to-text` executable"
-				},
-				"vscode-dhall-lsp-server.preview.dhallToText.extraArguments": {
-					"scope": "window",
-					"type": "string",
-					"default": "--explain",
-					"description": "Extra arguments to be passed."
-				},
-				"vscode-dhall-lsp-server.preview.dhallToBash.executable": {
-					"scope": "window",
-					"type": "string",
-					"default": "--explain",
-					"markdownDescription": "Path to the `dhall-to-bash` executable"
-				},
-				"vscode-dhall-lsp-server.preview.dhallToBash.extraArguments": {
-					"scope": "window",
-					"type": "string",
-					"default": "--explain",
-					"description": "Extra arguments to be passed."
-				},
-				"vscode-dhall-lsp-server.preview.dhallToYaml.executable": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the `dhall-to-yaml` executable"
-				},
-				"vscode-dhall-lsp-server.preview.dhallToYaml.extraArguments": {
-					"scope": "window",
-					"type": "string",
-					"default": "--explain",
-					"description": "Extra arguments to be passed."
 				}
 			}
 		}

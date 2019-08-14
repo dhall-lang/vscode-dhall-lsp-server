@@ -6,7 +6,6 @@ import * as child_process from 'child_process';
 // import * as os from 'os';
 // import * as path from 'path';
 import * as util from 'util';
-import * as preview from './preview';
 import * as explain from './explain';
 
 import {
@@ -98,11 +97,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	client.start();
 	outputChannel.appendLine("..Dhall LSP Server has been started..");
-
-	preview.activatePreview('dhall-json', context.subscriptions);
-	preview.activatePreview('dhall-text', context.subscriptions);
-	preview.activatePreview('dhall-bash', context.subscriptions);
-	preview.activatePreview('dhall-yaml', context.subscriptions);
 
 	// activate linting command
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {

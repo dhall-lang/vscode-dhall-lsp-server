@@ -33,6 +33,7 @@ The "official" releases can be installed as follows:
 2. Clone `git@github.com:dhall-lang/dhall-haskell.git`.
 3. Inside the checked out repository run `stack install dhall-lsp-server`.
 
+
 # Usage / Features
 
 - **Diagnostics&nbsp;**
