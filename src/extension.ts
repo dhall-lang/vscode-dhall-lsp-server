@@ -86,7 +86,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
 		},
-		initializationOptions: workspace.getConfiguration("vscode-dhall-lsp-server"),
+    initializationOptions: {
+			'vscode-dhall-lsp-server': workspace.getConfiguration("vscode-dhall-lsp-server")
+		},
 		outputChannel: outputChannel
 	};
 
