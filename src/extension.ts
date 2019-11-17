@@ -82,8 +82,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	let clientOptions: LanguageClientOptions = {
 		documentSelector: [{ scheme: 'file', language: 'dhall' }],
 		synchronize: {
+			configurationSection: 'vscode-dhall-lsp-server',
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
+		},
+    initializationOptions: {
+			'vscode-dhall-lsp-server': workspace.getConfiguration("vscode-dhall-lsp-server")
 		},
 		outputChannel: outputChannel
 	};
