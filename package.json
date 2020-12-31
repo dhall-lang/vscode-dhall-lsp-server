@@ -94,6 +94,12 @@
 					"default": "",
 					"markdownDescription": "Path to the `dhall-lsp-server` executable"
 				},
+				"vscode-dhall-lsp-server.character-set": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Character set for `dhall format`: Either `unicode` or `ascii`. If left empty, character set will be inferred."
+				},
 				"vscode-dhall-lsp-server.logFile": {
 					"scope": "window",
 					"type": "string",
