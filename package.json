@@ -3,7 +3,7 @@
 	"displayName": "Dhall LSP Server",
 	"description": "An LSP protocol implementation for the Dhall programming language",
 	"version": "0.0.4",
-	"publisher": "panaeon",
+	"publisher": "dhall",
 	"license": "MIT",
 	"preview": true,
 	"engines": {
