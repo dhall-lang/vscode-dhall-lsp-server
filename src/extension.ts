@@ -62,8 +62,8 @@ export async function activate(context: vscode.ExtensionContext) {
 				'Maybe you have a custom setup that\'s taking too long to start the server.');
 		} else {
 			if (userDefinedExecutablePath === '') {
-			  		window.showErrorMessage('No `dhall-lsp-server` executable is available in the VSCode PATH.\n' +
-			                     'You might need to install [Dhall LSP server](https://github.com/PanAeon/dhall-lsp-server).\n' +
+			  window.showErrorMessage('No `dhall-lsp-server` executable is available in the VSCode PATH.\n' +
+			                     'You might need to install [Dhall LSP server](https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-lsp-server).\n' +
 								 'Also you might want to set an absolute path to the `dhall-lsp-server` executable ' +
 								 'in the plugin settings.');
 					return;
