@@ -7,6 +7,7 @@ import * as child_process from 'child_process';
 // import * as path from 'path';
 import * as util from 'util';
 import * as explain from './explain';
+import * as os from 'os';
 
 import {
 	window,
@@ -35,23 +36,42 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	let executablePath =  (userDefinedExecutablePath === '') ? 'dhall-lsp-server' : userDefinedExecutablePath;
 
+	console.log(`Trying to find the server executable in: ${executablePath}`);
+	// Substitute path variables with their corresponding locations.
+	executablePath = executablePath.replace('${HOME}', os.homedir).replace('${home}', os.homedir).replace(/^~/, os.homedir);
+	if (executablePath === '') {
+		window.showErrorMessage(`dhall executable path: ${executablePath} is empty, check your configuration`);
+		return;
+	}
+	
+	let folders = workspace.workspaceFolders
+	if (folders) {
+		let folder = folders[0]
+		if (folder) {
+			executablePath = executablePath.replace('${workspaceFolder}', folder.uri.path).replace('${workspaceRoot}', folder.uri.path);
+		}
+	}
+
+	console.log(`Location after path variables subsitution: ${executablePath}`);
+		
 	const executableStatus = await obtainExecutableStatus(executablePath);
 
 	if (executableStatus !== 'available') {
 		if (executableStatus === 'timedout') {
-			window.showErrorMessage('The server process has timed out.');
+			window.showInformationMessage('The server process has timed out.' +
+				'Maybe you have a custom setup that\'s taking too long to start the server.');
 		} else {
 			if (userDefinedExecutablePath === '') {
 			  window.showErrorMessage('No `dhall-lsp-server` executable is available in the VSCode PATH.\n' +
 			                     'You might need to install [Dhall LSP server](https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-lsp-server).\n' +
 								 'Also you might want to set an absolute path to the `dhall-lsp-server` executable ' +
 								 'in the plugin settings.');
-			} else {
-				window.showErrorMessage('The server executable path is invalid: [' + executablePath + "]");
-			}
+					return;
+				} else {
+					window.showInformationMessage('The user defined executable path couldn\'t be exec\'d: [' +
+						executablePath + "]. The language server probably still works. So continuing.");
+				}
 		}
-
-		return;
 	}
 
 	// TODO: properly parse extra arguments!! UNIT TEST !!
