@@ -133,19 +133,18 @@ export async function activate(context: vscode.ExtensionContext) {
   client.start();
   outputChannel.appendLine("..Dhall LSP Server has been started..");
 
-  // activate linting command
+  // activate freezeAllImports command
   context.subscriptions.push(
-    vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {
+    vscode.commands.registerTextEditorCommand(
+      "dhall.lint",
+      (editor, edit) => {
       const cmd = {
         command: "dhall.server.lint",
         arguments: [editor.document.uri.toString()],
       };
       client.sendRequest("workspace/executeCommand", cmd);
-    }),
-  );
-
-  // activate annotateLet command
-  context.subscriptions.push(
+      },
+    ),
     vscode.commands.registerTextEditorCommand(
       "dhall.annotateLet",
       (editor, edit) => {
@@ -161,10 +160,6 @@ export async function activate(context: vscode.ExtensionContext) {
         client.sendRequest("workspace/executeCommand", cmd);
       },
     ),
-  );
-
-  // activate freezeImport command
-  context.subscriptions.push(
     vscode.commands.registerTextEditorCommand(
       "dhall.freezeImport",
       (editor, edit) => {
@@ -180,10 +175,6 @@ export async function activate(context: vscode.ExtensionContext) {
         client.sendRequest("workspace/executeCommand", cmd);
       },
     ),
-  );
-
-  // activate freezeAllImports command
-  context.subscriptions.push(
     vscode.commands.registerTextEditorCommand(
       "dhall.freezeAllImports",
       (editor, edit) => {
@@ -194,10 +185,6 @@ export async function activate(context: vscode.ExtensionContext) {
         client.sendRequest("workspace/executeCommand", cmd);
       },
     ),
-  );
-
-  // enable "dhall-explain" URIs
-  context.subscriptions.push(
     vscode.workspace.registerTextDocumentContentProvider(
       "dhall-explain",
       new explain.ExplainProvider(),
