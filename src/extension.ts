@@ -2,15 +2,20 @@
 
 // The module 'vscode' contains the VS Code extensibility API
 import * as child_process from "child_process";
-import * as vscode from "vscode";
 // import * as os from 'os';
 // import * as path from 'path';
 import * as os from "os";
 import * as util from "util";
-import * as explain from "./explain";
-
+import * as vscode from "vscode";
 import { window, workspace } from "vscode";
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from "vscode-languageclient";
+import {
+  LanguageClient,
+  LanguageClientOptions,
+  ServerOptions,
+  TransportKind,
+} from "vscode-languageclient/node";
+
+import * as explain from "./explain";
 
 let client: LanguageClient;
 
@@ -23,29 +28,30 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const config = workspace.getConfiguration("vscode-dhall-lsp-server");
 
-  const userDefinedExecutablePath = config.executable;
+  const userDefinedExecutablePath = config.get<string>("executable");
 
-  let executablePath = (userDefinedExecutablePath === "") ? "dhall-lsp-server" : userDefinedExecutablePath;
+  let executablePath = userDefinedExecutablePath ?? "dhall-lsp-server";
 
   console.log(`Trying to find the server executable in: ${executablePath}`);
   // Substitute path variables with their corresponding locations.
-  executablePath = executablePath.replace("${HOME}", os.homedir).replace("${home}", os.homedir).replace(
-    /^~/,
-    os.homedir,
-  );
+  executablePath = executablePath
+    .replace("${HOME}", os.homedir)
+    .replace("${home}", os.homedir)
+    .replace(/^~/, os.homedir);
   if (executablePath === "") {
-    window.showErrorMessage(`dhall executable path: ${executablePath} is empty, check your configuration`);
+    window.showErrorMessage(
+      `dhall executable path: ${executablePath} is empty, check your configuration`,
+    );
     return;
   }
 
-  let folders = workspace.workspaceFolders;
+  const folders = workspace.workspaceFolders;
   if (folders) {
-    let folder = folders[0];
+    const folder = folders[0];
     if (folder) {
-      executablePath = executablePath.replace("${workspaceFolder}", folder.uri.path).replace(
-        "${workspaceRoot}",
-        folder.uri.path,
-      );
+      executablePath = executablePath
+        .replace("${workspaceFolder}", folder.uri.path)
+        .replace("${workspaceRoot}", folder.uri.path);
     }
   }
 
@@ -70,8 +76,7 @@ export async function activate(context: vscode.ExtensionContext) {
         return;
       } else {
         window.showInformationMessage(
-          "The user defined executable path couldn't be exec'd: ["
-            + executablePath + "]. The language server probably still works. So continuing.",
+          `The user defined executable path couldn't be exec'd: [${executablePath}]. The language server probably still works. So continuing.`,
         );
       }
     }
@@ -80,16 +85,22 @@ export async function activate(context: vscode.ExtensionContext) {
   // TODO: properly parse extra arguments!! UNIT TEST !!
   const logFile: string = config.logFile;
 
-  const logFileOpt: string[] = logFile.trim() === "" ? [] : ["--log=" + logFile];
+  const logFileOpt: string[] = logFile.trim() === ""
+    ? []
+    : [`--log=${logFile}`];
 
   // let serverCommand = '~/.local/bin/dhall-lsp-server'; // context.asAbsolutePath(path.parse());
   // let serverCommand = context.asAbsolutePath(path.join('/home/vitalii/.local/bin/dhall-lsp-server'));
 
-  let runArgs: string[] = [...logFileOpt];
-  let debugArgs: string[] = [...logFileOpt];
+  const runArgs: string[] = [...logFileOpt];
+  const debugArgs: string[] = [...logFileOpt];
 
-  let serverOptions: ServerOptions = {
-    run: { command: executablePath, transport: TransportKind.stdio, args: runArgs },
+  const serverOptions: ServerOptions = {
+    run: {
+      command: executablePath,
+      transport: TransportKind.stdio,
+      args: runArgs,
+    },
     debug: {
       command: executablePath,
       transport: TransportKind.stdio,
@@ -97,7 +108,7 @@ export async function activate(context: vscode.ExtensionContext) {
     },
   };
 
-  let clientOptions: LanguageClientOptions = {
+  const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "dhall" }],
     synchronize: {
       configurationSection: "vscode-dhall-lsp-server",
@@ -105,9 +116,11 @@ export async function activate(context: vscode.ExtensionContext) {
       fileEvents: vscode.workspace.createFileSystemWatcher("**/.clientrc"),
     },
     initializationOptions: {
-      "vscode-dhall-lsp-server": workspace.getConfiguration("vscode-dhall-lsp-server"),
+      "vscode-dhall-lsp-server": workspace.getConfiguration(
+        "vscode-dhall-lsp-server",
+      ),
     },
-    outputChannel: outputChannel,
+    outputChannel,
   };
 
   client = new LanguageClient(
@@ -121,50 +134,67 @@ export async function activate(context: vscode.ExtensionContext) {
   outputChannel.appendLine("..Dhall LSP Server has been started..");
 
   // activate linting command
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {
-    const cmd = {
-      command: "dhall.server.lint",
-      arguments: [editor.document.uri.toString()],
-    };
-    client.sendRequest("workspace/executeCommand", cmd);
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerTextEditorCommand("dhall.lint", (editor, edit) => {
+      const cmd = {
+        command: "dhall.server.lint",
+        arguments: [editor.document.uri.toString()],
+      };
+      client.sendRequest("workspace/executeCommand", cmd);
+    }),
+  );
 
   // activate annotateLet command
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.annotateLet", (editor, edit) => {
-    const cmd = {
-      command: "dhall.server.annotateLet",
-      arguments: [
-        {
-          position: editor.selection.active,
-          textDocument: { uri: editor.document.uri.toString() },
-        },
-      ],
-    }; // editor.document.uri.toString()
-    client.sendRequest("workspace/executeCommand", cmd);
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerTextEditorCommand(
+      "dhall.annotateLet",
+      (editor, edit) => {
+        const cmd = {
+          command: "dhall.server.annotateLet",
+          arguments: [
+            {
+              position: editor.selection.active,
+              textDocument: { uri: editor.document.uri.toString() },
+            },
+          ],
+        }; // editor.document.uri.toString()
+        client.sendRequest("workspace/executeCommand", cmd);
+      },
+    ),
+  );
 
   // activate freezeImport command
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.freezeImport", (editor, edit) => {
-    const cmd = {
-      command: "dhall.server.freezeImport",
-      arguments: [
-        {
-          position: editor.selection.active,
-          textDocument: { uri: editor.document.uri.toString() },
-        },
-      ],
-    }; // editor.document.uri.toString()
-    client.sendRequest("workspace/executeCommand", cmd);
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerTextEditorCommand(
+      "dhall.freezeImport",
+      (editor, edit) => {
+        const cmd = {
+          command: "dhall.server.freezeImport",
+          arguments: [
+            {
+              position: editor.selection.active,
+              textDocument: { uri: editor.document.uri.toString() },
+            },
+          ],
+        }; // editor.document.uri.toString()
+        client.sendRequest("workspace/executeCommand", cmd);
+      },
+    ),
+  );
 
   // activate freezeAllImports command
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.freezeAllImports", (editor, edit) => {
-    const cmd = {
-      command: "dhall.server.freezeAllImports",
-      arguments: [editor.document.uri.toString()],
-    };
-    client.sendRequest("workspace/executeCommand", cmd);
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerTextEditorCommand(
+      "dhall.freezeAllImports",
+      (editor, edit) => {
+        const cmd = {
+          command: "dhall.server.freezeAllImports",
+          arguments: [editor.document.uri.toString()],
+        };
+        client.sendRequest("workspace/executeCommand", cmd);
+      },
+    ),
+  );
 
   // enable "dhall-explain" URIs
   context.subscriptions.push(
@@ -191,16 +221,22 @@ export async function activate(context: vscode.ExtensionContext) {
 // TODO: maybe use promisify-child-process ??
 
 // TODO: should also handle case when executable has returned error code on startup
-async function obtainExecutableStatus(executableLocation: string): Promise<string> {
-  const execPromise = util.promisify(child_process.execFile)(executableLocation, ["version"], {
-    timeout: 2000,
-    windowsHide: true,
-  })
+async function obtainExecutableStatus(
+  executableLocation: string,
+): Promise<string> {
+  const execPromise = util.promisify(child_process.execFile)(
+    executableLocation,
+    ["version"],
+    {
+      timeout: 2000,
+      windowsHide: true,
+    },
+  )
     .then(() => "available").catch((error) => {
       return "missing";
     });
   const timeoutPromise: Promise<string> = new Promise((resolve, reject) => {
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       clearTimeout(timer);
       resolve("timedout");
     }, 1000);

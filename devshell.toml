@@ -3,7 +3,9 @@ name = "vscode-dhall-lsp-server"
 packages = [
   "alejandra",
   "dprint",
-  "nodePackages.npm",
+  "nodejs-16_x",
+  "dhall",
+  "dhall-lsp-server",
 ]
 
 [[commands]]
