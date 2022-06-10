@@ -1,11 +1,43 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
-    },
-    "search.exclude": {
-        "out": true // set this to false to include "out" folder in search results
-    },
-    // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-    "typescript.tsc.autoDetect": "off"
+  "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
+  "files.exclude": {
+    "out": false // set this to true to hide the "out" folder with the compiled JS files
+  },
+  "search.exclude": {
+    "out": true // set this to false to include "out" folder in search results
+  },
+  // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
+  "typescript.tsc.autoDetect": "off",
+  "customLocalFormatters.formatters": [
+    {
+      "command": "treefmt -q --stdin ${file}",
+      "languages": [
+        "typescript",
+        "json",
+        "jsonc",
+        "md",
+        "nix",
+        "toml"
+      ]
+    }
+  ],
+  "[toml]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "[md]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters"
+  }
 }

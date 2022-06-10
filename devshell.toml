@@ -1,0 +1,11 @@
+[devshell]
+name = "vscode-dhall-lsp-server"
+packages = [
+  "alejandra",
+  "dprint",
+  "nodePackages.npm",
+]
+
+[[commands]]
+package = "treefmt"
+category = "formatter"
