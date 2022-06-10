@@ -1,6 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": {
     "out": false // set this to true to hide the "out" folder with the compiled JS files
   },
