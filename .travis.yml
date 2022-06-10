@@ -21,4 +21,3 @@ jobs:
         - set -e
         # publish the extension to the Marketplace
         - vsce publish -p $VS_MARKETPLACE_TOKEN
-

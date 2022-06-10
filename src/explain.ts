@@ -1,7 +1,7 @@
-import {TextDocumentContentProvider, Uri} from 'vscode';
+import { TextDocumentContentProvider, Uri } from "vscode";
 
 export class ExplainProvider implements TextDocumentContentProvider {
-    provideTextDocumentContent(uri: Uri) : string {
-        return decodeURIComponent(uri.query);
-    }
+  provideTextDocumentContent(uri: Uri): string {
+    return decodeURIComponent(uri.query);
+  }
 }
