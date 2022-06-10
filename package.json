@@ -7,7 +7,7 @@
   "license": "MIT",
   "preview": true,
   "engines": {
-    "vscode": "^1.30.0"
+    "vscode": "^1.67.0"
   },
   "categories": [
     "Programming Languages"
@@ -123,6 +123,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
+    "package": "vsce package",
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "lint": "eslint .",
@@ -134,14 +135,14 @@
   "devDependencies": {
     "@types/mocha": "^2.2.42",
     "@types/node": "^16",
-    "@types/vscode": "^1.68.0",
+    "@types/vscode": "^1.67.0",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.17.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "tar": ">=4.4.18",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.3",
+    "vsce": "^2.9.1"
   }
 }
