@@ -137,17 +137,17 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerTextEditorCommand(
       "dhall.lint",
-      (editor, edit) => {
-      const cmd = {
-        command: "dhall.server.lint",
-        arguments: [editor.document.uri.toString()],
-      };
-      client.sendRequest("workspace/executeCommand", cmd);
+      (editor) => {
+        const cmd = {
+          command: "dhall.server.lint",
+          arguments: [editor.document.uri.toString()],
+        };
+        client.sendRequest("workspace/executeCommand", cmd);
       },
     ),
     vscode.commands.registerTextEditorCommand(
       "dhall.annotateLet",
-      (editor, edit) => {
+      (editor) => {
         const cmd = {
           command: "dhall.server.annotateLet",
           arguments: [
@@ -162,7 +162,7 @@ export async function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerTextEditorCommand(
       "dhall.freezeImport",
-      (editor, edit) => {
+      (editor) => {
         const cmd = {
           command: "dhall.server.freezeImport",
           arguments: [
@@ -177,7 +177,7 @@ export async function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerTextEditorCommand(
       "dhall.freezeAllImports",
-      (editor, edit) => {
+      (editor) => {
         const cmd = {
           command: "dhall.server.freezeAllImports",
           arguments: [editor.document.uri.toString()],
@@ -219,10 +219,10 @@ async function obtainExecutableStatus(
       windowsHide: true,
     },
   )
-    .then(() => "available").catch((error) => {
+    .then(() => "available").catch(() => {
       return "missing";
     });
-  const timeoutPromise: Promise<string> = new Promise((resolve, reject) => {
+  const timeoutPromise: Promise<string> = new Promise((resolve) => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
       resolve("timedout");
