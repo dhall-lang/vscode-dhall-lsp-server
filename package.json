@@ -128,7 +128,7 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"dependencies": {
-		"shell-quote": "~1.6.1",
+		"shell-quote": "~1.7.3",
 		"vscode-languageclient": "~5.1.1"
 	},
 	"devDependencies": {
