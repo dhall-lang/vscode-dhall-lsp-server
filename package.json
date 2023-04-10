@@ -1,143 +1,147 @@
 {
-	"name": "vscode-dhall-lsp-server",
-	"displayName": "Dhall LSP Server",
-	"description": "An LSP protocol implementation for the Dhall programming language",
-	"version": "0.0.4",
-	"publisher": "dhall",
-	"license": "MIT",
-	"preview": true,
-	"engines": {
-		"vscode": "^1.30.0"
-	},
-	"categories": [
-		"Programming Languages"
-	],
-	"keywords": [
-		"dhall",
-		"lsp",
-		"language server"
-	],
-	"activationEvents": [
-		"onLanguage:dhall"
-	],
-	"icon": "images/dhall-icon.png",
-	"galleryBanner": {
-		"color": "#293845",
-		"theme": "dark"
-	},
-	"homepage": "https://github.com/dhall-lang/vscode-dhall-lsp-server",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dhall-lang/vscode-dhall-lsp-server.git"
-	},
-	"bugs": {
-		"url": "https://github.com/dhall-lang/vscode-dhall-lsp-server/issues"
-	},
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "dhall.lint",
-				"title": "Lint and format Dhall file",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.annotateLet",
-				"title": "Annotate Let binding with its type",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.freezeImport",
-				"title": "Freeze (refreeze) import",
-				"category": "dhall"
-			},
-			{
-				"command": "dhall.freezeAllImports",
-				"title": "Freeze (refreeze) all imports",
-				"category": "dhall"
-			}
-		],
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "dhall.lint",
-					"when": "editorLangId == dhall",
-					"group": "navigation"
-				}
-			],
-			"editor/context": [
-				{
-					"command": "dhall.annotateLet",
-					"when": "editorLangId == dhall"
-				},
-				{
-					"command": "dhall.freezeImport",
-					"when": "editorLangId == dhall"
-				}
-			]
-		},
-		"languages": [
-			{
-				"id": "dhall",
-				"extensions": [
-					".dhall"
-				]
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "Dhall LSP",
-			"properties": {
-				"vscode-dhall-lsp-server.executable": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the `dhall-lsp-server` executable"
-				},
-				"vscode-dhall-lsp-server.character-set": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Character set for `dhall format`: Either `unicode` or `ascii`. If left empty, character set will be inferred."
-				},
-				"vscode-dhall-lsp-server.logFile": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
-				},
-				"vscode-dhall-lsp-server.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"dependencies": {
-		"shell-quote": "~1.6.1",
-		"vscode-languageclient": "~5.1.1"
-	},
-	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^8.10.25",
-		"@types/shell-quote": "~1.6.1",
-		"tar": ">=4.4.18",
-		"tslint": "^5.8.0",
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.34"
-	}
+  "name": "vscode-dhall-lsp-server",
+  "displayName": "Dhall LSP Server",
+  "description": "An LSP protocol implementation for the Dhall programming language",
+  "version": "0.0.5",
+  "publisher": "dhall",
+  "license": "MIT",
+  "preview": true,
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "dhall",
+    "lsp",
+    "language server"
+  ],
+  "icon": "images/dhall-icon.png",
+  "galleryBanner": {
+    "color": "#293845",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/dhall-lang/vscode-dhall-lsp-server",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhall-lang/vscode-dhall-lsp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dhall-lang/vscode-dhall-lsp-server/issues"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dhall.lint",
+        "title": "Lint and format Dhall file",
+        "category": "dhall"
+      },
+      {
+        "command": "dhall.annotateLet",
+        "title": "Annotate Let binding with its type",
+        "category": "dhall"
+      },
+      {
+        "command": "dhall.freezeImport",
+        "title": "Freeze (refreeze) import",
+        "category": "dhall"
+      },
+      {
+        "command": "dhall.freezeAllImports",
+        "title": "Freeze (refreeze) all imports",
+        "category": "dhall"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "dhall.lint",
+          "when": "editorLangId == dhall",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "dhall.annotateLet",
+          "when": "editorLangId == dhall"
+        },
+        {
+          "command": "dhall.freezeImport",
+          "when": "editorLangId == dhall"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "dhall",
+        "extensions": [
+          ".dhall"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Dhall LSP",
+      "properties": {
+        "vscode-dhall-lsp-server.executable": {
+          "scope": "window",
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to the `dhall-lsp-server` executable"
+        },
+        "vscode-dhall-lsp-server.character-set": {
+          "scope": "window",
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Character set for `dhall format`: Either `unicode` or `ascii`. If left empty, character set will be inferred."
+        },
+        "vscode-dhall-lsp-server.logFile": {
+          "scope": "window",
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
+        },
+        "vscode-dhall-lsp-server.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "shell-quote": "^1.8.1",
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.77.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@types/shell-quote": "^1.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "esbuild": "^0.17.16",
+    "typescript": "^5.0.4",
+    "@vscode/test-electron": "^2.3.0"
+  }
 }
