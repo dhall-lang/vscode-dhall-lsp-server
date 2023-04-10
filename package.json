@@ -124,7 +124,7 @@
     "watch": "webpack --mode development --watch",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/src/test/runTest.js"
   },
   "dependencies": {
     "shell-quote": "^1.8.1",
