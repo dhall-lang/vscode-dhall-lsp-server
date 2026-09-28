@@ -3,6 +3,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+import * as fs from 'fs';
 // import * as os from 'os';
 // import * as path from 'path';
 import * as util from 'util';
@@ -171,6 +172,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.registerTextDocumentContentProvider(
 			"dhall-explain", new explain.ExplainProvider()));
 
+	context.subscriptions.push(
+		vscode.commands.registerCommand("dhall.importJson", () => importExternal("json")));
+	context.subscriptions.push(
+		vscode.commands.registerCommand("dhall.importYaml", () => importExternal("yaml")));
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -203,6 +209,71 @@ async function obtainExecutableStatus(executableLocation: string) : Promise<stri
   return Promise.race([execPromise, timeoutPromise]);
 }
 
+
+async function importExternal(kind: "json" | "yaml") {
+	const config = workspace.getConfiguration("vscode-dhall-lsp-server");
+	const configured = kind === "json"
+		? config.get<string>("jsonToDhall", "")
+		: config.get<string>("yamlToDhall", "");
+	const executable = configured.trim() === ""
+		? (kind === "json" ? "json-to-dhall" : "yaml-to-dhall")
+		: configured.trim();
+
+	const editor = window.activeTextEditor;
+	const selection = editor ? editor.document.getText(editor.selection) : "";
+	let source = selection;
+	if (source.trim() === "") {
+		const choice = await window.showQuickPick(
+			["Clipboard", "File"],
+			{ placeHolder: "Import " + kind.toUpperCase() + " from" });
+		if (!choice) {
+			return;
+		}
+		if (choice === "Clipboard") {
+			source = await vscode.env.clipboard.readText();
+		} else {
+			const picked = await window.showOpenDialog({ canSelectMany: false });
+			if (!picked || !picked[0]) {
+				return;
+			}
+			source = fs.readFileSync(picked[0].fsPath, "utf8");
+		}
+	}
+
+	const schema = await window.showInputBox({
+		prompt: "Optional Dhall type used as the conversion schema",
+		placeHolder: "leave empty to infer a type"
+	});
+	if (schema === undefined) {
+		return;
+	}
+
+	const args = schema.trim() === "" ? [] : ["--type", schema.trim()];
+	const result = await new Promise<string>((resolve, reject) => {
+		const child = child_process.spawn(executable, args);
+		let stdout = "";
+		let stderr = "";
+		child.stdout.on("data", (chunk) => { stdout += chunk.toString(); });
+		child.stderr.on("data", (chunk) => { stderr += chunk.toString(); });
+		child.on("error", reject);
+		child.on("close", (code) => {
+			if (code === 0) {
+				resolve(stdout);
+			} else {
+				reject(new Error(stderr || (executable + " exited with code " + code)));
+			}
+		});
+		child.stdin.end(source);
+	}).catch((error: Error) => {
+		window.showErrorMessage(error.message);
+		return undefined;
+	});
+	if (result === undefined) {
+		return;
+	}
+	const document = await workspace.openTextDocument({ language: "dhall", content: result });
+	await window.showTextDocument(document);
+}
 
 export function deactivate() {
 	if (!client) {

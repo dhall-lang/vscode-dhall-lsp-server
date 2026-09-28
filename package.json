@@ -55,6 +55,16 @@
 				"command": "dhall.freezeAllImports",
 				"title": "Freeze (refreeze) all imports",
 				"category": "dhall"
+			},
+			{
+				"command": "dhall.importJson",
+				"title": "Import JSON",
+				"category": "dhall"
+			},
+			{
+				"command": "dhall.importYaml",
+				"title": "Import YAML",
+				"category": "dhall"
 			}
 		],
 		"menus": {
@@ -105,6 +115,18 @@
 					"type": "string",
 					"default": "",
 					"markdownDescription": "Dhall LSP server log file location Put `[OUTPUT]` to log to the VSCode output."
+				},
+				"vscode-dhall-lsp-server.jsonToDhall": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to `json-to-dhall`. Empty uses the executable on `PATH`."
+				},
+				"vscode-dhall-lsp-server.yamlToDhall": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to `yaml-to-dhall`. Empty uses the executable on `PATH`."
 				},
 				"vscode-dhall-lsp-server.trace.server": {
 					"scope": "window",
