@@ -7,6 +7,7 @@ import * as child_process from 'child_process';
 // import * as path from 'path';
 import * as util from 'util';
 import * as explain from './explain';
+import { DhallImportFileSystem, mountDhallImports } from './importFs';
 import * as os from 'os';
 
 import {
@@ -100,14 +101,18 @@ export async function activate(context: vscode.ExtensionContext) {
 	};
 
 	let clientOptions: LanguageClientOptions = {
-		documentSelector: [{ scheme: 'file', language: 'dhall' }],
+		documentSelector: [
+			{ scheme: 'file', language: 'dhall' },
+			{ scheme: 'dhall-import', language: 'dhall' }
+		],
 		synchronize: {
 			configurationSection: 'vscode-dhall-lsp-server',
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
 		},
     initializationOptions: {
-			'vscode-dhall-lsp-server': workspace.getConfiguration("vscode-dhall-lsp-server")
+			'vscode-dhall-lsp-server': workspace.getConfiguration("vscode-dhall-lsp-server"),
+			experimental: { dhallImportFileSystem: true }
 		},
 		outputChannel: outputChannel
 	};
@@ -170,6 +175,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.workspace.registerTextDocumentContentProvider(
 			"dhall-explain", new explain.ExplainProvider()));
+
+	context.subscriptions.push(
+		vscode.workspace.registerFileSystemProvider(
+			"dhall-import", new DhallImportFileSystem(client), { isReadonly: true }));
+	context.subscriptions.push(
+		vscode.commands.registerCommand("dhall.mountImports", () => mountDhallImports()));
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand("dhall.server.showOriginalSource", (editor) => {
+		const cmd = {
+			command: "dhall.server.showOriginalSource",
+			arguments: [editor.document.uri.toString()]
+		};
+		client.sendRequest("workspace/executeCommand", cmd);
+	}));
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand

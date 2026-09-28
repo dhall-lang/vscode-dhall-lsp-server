@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"preview": true,
 	"engines": {
-		"vscode": "^1.30.0"
+		"vscode": "^1.39.0"
 	},
 	"categories": [
 		"Programming Languages"
@@ -54,6 +54,16 @@
 			{
 				"command": "dhall.freezeAllImports",
 				"title": "Freeze (refreeze) all imports",
+				"category": "dhall"
+			},
+			{
+				"command": "dhall.mountImports",
+				"title": "Open Dhall imports",
+				"category": "dhall"
+			},
+			{
+				"command": "dhall.server.showOriginalSource",
+				"title": "Show original source",
 				"category": "dhall"
 			}
 		],
