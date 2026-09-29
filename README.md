@@ -34,6 +34,10 @@ The "official" releases can be installed as follows:
 3. Inside the checked out repository run `stack install dhall-lsp-server`.
 
 
+# Imported sources
+
+Hashed imports open from the semantic cache, which is the alpha-beta-normal form, without fetching. The command "Show original source" asks the server to fetch and replaces that view only when the fetched code matches the frozen hash. "Open Dhall imports" mounts `dhall-import:/` as a read-only workspace folder named "Dhall imports". The on-disk mirror under `$XDG_CACHE_HOME/dhall-lsp/sources` is marked read-only with `files.readonlyInclude`. This branch calls the server request `dhall/importSource`, so it belongs with a server that implements that request.
+
 # Usage / Features
 
 - **Diagnostics&nbsp;**
