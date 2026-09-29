@@ -34,6 +34,10 @@ The "official" releases can be installed as follows:
 3. Inside the checked out repository run `stack install dhall-lsp-server`.
 
 
+# Language client
+
+This branch uses `vscode-languageclient` 8 and requires VS Code 1.67 or newer. After this upgrade, VS Code requests inlay hints, semantic tokens, and folding ranges when the language server offers them. Go to definition, references, rename, document symbols, and code actions (the lightbulb) already worked with language client 5.1, so those do not depend on this upgrade.
+
 # Usage / Features
 
 - **Diagnostics&nbsp;**
