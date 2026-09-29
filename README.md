@@ -61,6 +61,9 @@ Right click and select "Format Document" to run the file through the Dhall forma
 - **Annotate lets&nbsp;**
 Right-click the bound identifier in a `let` binding and select "Annotate Let binding with its type" to do exactly that.
 
+- **Import JSON and YAML&nbsp;**
+The commands "Import JSON" and "Import YAML" convert text into Dhall by running `json-to-dhall` or `yaml-to-dhall`. The input is the current selection, or, when that is empty, the clipboard or a file you pick. An optional Dhall type is the schema those tools already accept (`--type`). The result opens in an editor. This is not a JSON Schema converter, and the language server is not involved. Set `vscode-dhall-lsp-server.jsonToDhall` and `vscode-dhall-lsp-server.yamlToDhall` when the executables are not on `PATH`.
+
 - **Freeze imports&nbsp;**
 Right-click an import statement and select "Freeze (refreeze) import" to add (or update) a semantic hash annotation to the import. You can also select "Freee (refreeze) all imports" from the *Command Palette* to freeze all imports at once.
 
